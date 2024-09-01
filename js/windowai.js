@@ -29,45 +29,47 @@ async function render({ model, el }) {
         });
       } catch (error) {
         console.error("Failed to create AI session:", error);
-        model.set("output", "Error: Failed to create AI session");
-        model.save_changes();
+        updateOutput("Error: Failed to create AI session", msg.request_id);
         return;
       }
     }
 
     if (msg.action === "prompt") {
       try {
+        responseDiv.textContent = "[Processing prompt...]"
         const response = await session.prompt(msg.message);
-        model.set("output", response);
-        model.save_changes();
+        updateOutput(response, msg.request_id);
       } catch (error) {
         console.error("Error getting AI response:", error);
-        model.set("output", "Error: " + error.message);
-        model.save_changes();
+        updateOutput("Error: " + error.message, msg.request_id);
       }
     } else if (msg.action === "prompt_streaming") {
       try {
         const stream = await session.promptStreaming(msg.message);
         let fullResponse = "";
         for await (const chunk of stream) {
-          fullResponse += chunk;
-          model.set("output", fullResponse);
-          model.save_changes();
+          //fullResponse += chunk;
+          //updateOutput(fullResponse, msg.request_id);
+          updateOutput(chunk, msg.request_id);
         }
       } catch (error) {
         console.error("Error streaming AI response:", error);
-        model.set("output", "Error: " + error.message);
-        model.save_changes();
+        updateOutput("Error: " + error.message, msg.request_id);
       }
     } else if (msg.action === "destroy") {
       if (session) {
         session.destroy();
         session = null;
       }
-      model.set("output", "Session destroyed");
-      model.save_changes();
+      updateOutput("Session destroyed", msg.request_id);
     }
   });
+
+  function updateOutput(text, request_id) {
+    model.set("output", text);
+    model.set("_request_id", request_id);
+    model.save_changes();
+  }
 }
 
 export default { render };
