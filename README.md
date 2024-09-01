@@ -87,3 +87,11 @@ See `window.ai.assistant` docs for more examples that should translate: [Google 
 - add support for changing `temperature`, `topK`;
 - add `autosession` flag to allow session to be automatically configured and created when a widget is instantiated;
 - add support for other APIs ([`explainers-by-googlers/writing-assistance-apis`](https://github.com/explainers-by-googlers/writing-assistance-apis))
+
+## ELSEWHERE
+
+See other examples of running "sideloaded" WASM apps using Jupyter `anywidget` models
+
+- PGLite (PostgreSQL) wasm — in-browser database: [`jupyter_anywidget_pglite`](https://github.com/innovationOUtside/jupyter_anywidget_pglite)
+- Tesseract/pdfjs — in-browser OCR: [jupyter_anywidget_tesseract_pdfjs](https://github.com/innovationOUtside/jupyter_anywidget_tesseract_pdfjs)
+- Graphviz — in-browser graphviz diagrams from `.dot` code: [`jupyter_anywidget_graphviz`](https://github.com/innovationOUtside/jupyter_anywidget_graphviz)
