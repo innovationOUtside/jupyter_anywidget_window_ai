@@ -93,5 +93,5 @@ See `window.ai.assistant` docs for more examples that should translate: [Google 
 See other examples of running "sideloaded" WASM apps using Jupyter `anywidget` models
 
 - PGLite (PostgreSQL) wasm — in-browser database: [`jupyter_anywidget_pglite`](https://github.com/innovationOUtside/jupyter_anywidget_pglite)
-- Tesseract/pdfjs — in-browser OCR: [jupyter_anywidget_tesseract_pdfjs](https://github.com/innovationOUtside/jupyter_anywidget_tesseract_pdfjs)
+- Tesseract/pdfjs — in-browser OCR: [`jupyter_anywidget_tesseract_pdfjs`](https://github.com/innovationOUtside/jupyter_anywidget_tesseract_pdfjs)
 - Graphviz — in-browser graphviz diagrams from `.dot` code: [`jupyter_anywidget_graphviz`](https://github.com/innovationOUtside/jupyter_anywidget_graphviz)
