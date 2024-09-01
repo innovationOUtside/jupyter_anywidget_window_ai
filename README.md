@@ -10,6 +10,7 @@ We can test the availability of `window.ai` prompt API using some simple javascr
 
 ```javascript
 %%javascript
+// VIEW RESULT IN BROWSER DEV TOOLS CONSOLE
 
 // h/t ChatGPT
 
