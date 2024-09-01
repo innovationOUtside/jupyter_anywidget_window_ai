@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jupyter_anywidget_window_ai"
-version = "0.0.0"
-dependencies = ["anywidget"]
+version = "0.0.2"
+dependencies = ["anywidget", "sidecar"]
 readme = "README.md"
 
 [project.optional-dependencies]

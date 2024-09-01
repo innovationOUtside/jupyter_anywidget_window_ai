@@ -1,24 +1,23 @@
+import "./windowai.css";
+import html from "./windowai.html";
+import { add_html, playTone } from "./utils.js";
+
 async function render({ model, el }) {
-  el.classList.add("jupyter_anywidget_window_ai");
+  const _headless = model.get("headless");
+  add_html(el, html, _headless);
+  const systemDiv = el.querySelector('div[title="system_prompt"]');
 
-  const responseDiv = document.createElement("div");
-  responseDiv.setAttribute("name", "response");
-  responseDiv.style.whiteSpace = "pre-wrap";
-  responseDiv.style.fontFamily = "monospace";
-  responseDiv.style.padding = "10px";
-  responseDiv.style.border = "1px solid #ccc";
-  responseDiv.style.borderRadius = "5px";
-  responseDiv.style.marginTop = "10px";
-  responseDiv.style.minHeight = "100px";
-  responseDiv.style.maxHeight = "300px";
-  responseDiv.style.overflowY = "auto";
-  el.appendChild(responseDiv);
-
+  const responseDiv = el.querySelector('div[title="response"]');
   let session = null;
 
   model.on("change:output", () => {
     responseDiv.textContent = model.get("output");
+    //systemDiv.textContent = `SYSTEM PROMPT: ${model.get("system_prompt")}`;
   });
+
+    model.on("change:system_prompt", () => {
+      systemDiv.textContent = `SYSTEM PROMPT: ${model.get("system_prompt")}`;
+    });
 
   model.on("msg:custom", async (msg) => {
     if (!session) {
@@ -27,6 +26,7 @@ async function render({ model, el }) {
           systemPrompt: model.get("system_prompt"),
           initialPrompts: model.get("initial_prompts"),
         });
+        
       } catch (error) {
         console.error("Failed to create AI session:", error);
         updateOutput("Error: Failed to create AI session", msg.request_id);
@@ -36,9 +36,11 @@ async function render({ model, el }) {
 
     if (msg.action === "prompt") {
       try {
-        responseDiv.textContent = "[Processing prompt...]"
+        responseDiv.textContent = "[Processing prompt...]";
         const response = await session.prompt(msg.message);
-        updateOutput(response, msg.request_id);
+        const speak = model.get("speak_msg") ? response : '';
+        const ping = model.get("completion_tone"); ;
+        updateOutput(response, msg.request_id, ping, speak);
       } catch (error) {
         console.error("Error getting AI response:", error);
         updateOutput("Error: " + error.message, msg.request_id);
@@ -46,7 +48,7 @@ async function render({ model, el }) {
     } else if (msg.action === "prompt_streaming") {
       try {
         const stream = await session.promptStreaming(msg.message);
-        let fullResponse = "";
+        //let fullResponse = "";
         for await (const chunk of stream) {
           //fullResponse += chunk;
           //updateOutput(fullResponse, msg.request_id);
@@ -60,15 +62,18 @@ async function render({ model, el }) {
       if (session) {
         session.destroy();
         session = null;
+        model.set("output", "[Session closed]");
+        model.save_changes()
       }
-      updateOutput("Session destroyed", msg.request_id);
+      updateOutput("[Session destroyed]", msg.request_id);
     }
   });
 
-  function updateOutput(text, request_id) {
+  function updateOutput(text, request_id, completion_tone=false, speak='') {
     model.set("output", text);
     model.set("_request_id", request_id);
     model.save_changes();
+    if (completion_tone || speak) playTone(completion_tone, speak, 1000, 100, 0.1, "sine");
   }
 }
 

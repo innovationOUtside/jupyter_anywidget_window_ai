@@ -1,0 +1,14 @@
+
+.windowai-app-container {margin-left:5px;}
+
+.windowai-app-container .response-div,.system-prompt-div {
+    white-space: pre-wrap;
+    font-family: monospace;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    min-height: 100px;
+    max-height: 300px;
+    overflow-y: auto;
+}
