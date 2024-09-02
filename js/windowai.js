@@ -33,16 +33,14 @@ async function render({ model, el }) {
   model.on("msg:custom", async (msg) => {
     if (!session) {
       try {
-        const options = {
-        
-        };
+        const options = {};
         const systemPrompt = model.get("system_prompt");
-if (systemPrompt) options.systemPrompt = systemPrompt;
-        const initialPrompts= model.get("initial_prompts")
-if (initialPrompts) options.initialPrompts = initialPrompts;
+        if (systemPrompt) options.systemPrompt = systemPrompt;
+        const initialPrompts = model.get("initial_prompts");
+        if (initialPrompts) options.initialPrompts = initialPrompts;
         // Only add temperature if it's set
         const temperature = model.get("temperature");
-        if (temperature !=-1) {
+        if (temperature != -1) {
           // checks for both null and undefined
           options.temperature = temperature;
         }
@@ -53,7 +51,7 @@ if (initialPrompts) options.initialPrompts = initialPrompts;
           // checks for both null and undefined
           options.topK = topK;
         }
-        console.log(`Creating model with optons: ${JSON.stringify(options)}`)
+        console.log(`Creating model with optons: ${JSON.stringify(options)}`);
         session = await window.ai.assistant.create(options);
       } catch (error) {
         console.error("Failed to create AI session:", error);
