@@ -53,6 +53,10 @@ async function render({ model, el }) {
 
         console.log(`Creating model with options: ${JSON.stringify(options)}`);
         session = await window.ai.assistant.create(options);
+        el.querySelector('span[title="temperature"]').textContent =
+          "temperature: " + model.get("temperature");
+        el.querySelector('span[title="topK"]').textContent =
+          "topK: " + model.get("topK");
       } catch (error) {
         console.error("Failed to create AI session:", error);
         updateOutput("Error: Failed to create AI session", msg.request_id);
