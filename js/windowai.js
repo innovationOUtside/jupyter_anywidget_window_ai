@@ -34,23 +34,23 @@ async function render({ model, el }) {
     if (!session) {
       try {
         const options = {};
+        
         const systemPrompt = model.get("system_prompt");
         if (systemPrompt) options.systemPrompt = systemPrompt;
+
         const initialPrompts = model.get("initial_prompts");
         if (initialPrompts) options.initialPrompts = initialPrompts;
-        // Only add temperature if it's set
+
         const temperature = model.get("temperature");
         if (temperature != -1) {
-          // checks for both null and undefined
           options.temperature = temperature;
         }
 
-        // Only add topK if it's set
         const topK = model.get("topK");
         if (topK > -1) {
-          // checks for both null and undefined
           options.topK = topK;
         }
+
         console.log(`Creating model with optons: ${JSON.stringify(options)}`);
         session = await window.ai.assistant.create(options);
       } catch (error) {
