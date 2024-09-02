@@ -71,6 +71,8 @@ Get model capabilities: `w.update_capabilities()`. *Note that this may take a mo
 
 Create a prompt session with an optional system prompt: `w.create_session(system_prompt=PROMPT)`
 
+__*Note that the session is not actually created until the first prompt is executed.*__
+
 Submit a prompt: `w.prompt("Hello, how are you?")`
 
 Also available: `w.create_session(..., initialPrompts=[], temperature=FLOAT, topK=INT )`
