@@ -75,6 +75,10 @@ Submit a prompt: `w.prompt("Hello, how are you?")`
 
 Also available: `w.create_session(..., initialPrompts=[], temperature=FLOAT, topK=INT )`
 
+View the `temperature` and `topK` as `w.temperature` and `w.topK`respectively.
+
+*Note that the `temperature` and `topK` cannot be changed once the model is created; to modify paramters, optionally destroy the old model and create a new.*
+
 At the moment, there is no callback available on a response generated from a prompt. However, an audible alert *is* available.
 
 This is enabled by default in `windowai_headless()`. The response can also be spoken. Use boolean (`True`/`False` ) parameters `completion_tone=` and `speak_msg=` in `windowai_panel()`, `windowai_inline()` and `windowai_headless()` to set audible responses.

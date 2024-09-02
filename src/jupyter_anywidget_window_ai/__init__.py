@@ -49,7 +49,7 @@ class WindowAIWidget(anywidget.AnyWidget):
         self.session = True
         self.temperature = temperature or -1
         self.topK = topK or -1
-        self.output = "[Session created]"
+        self.output = "[Session parameters created]"
         # return self.session
 
     def prompt(self, message):
@@ -90,6 +90,7 @@ class WindowAIWidget(anywidget.AnyWidget):
 
     def get_capabilities(self):
         return self.capabilities
+
 
 
 def windowai_headless(completion_tone=True, speak_msg=False, **kwargs):
