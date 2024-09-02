@@ -5,6 +5,7 @@ from IPython.display import display
 
 import anywidget
 import traitlets
+
 from concurrent.futures import Future
 
 from .panel import create_panel
@@ -25,23 +26,31 @@ class WindowAIWidget(anywidget.AnyWidget):
 
     output = traitlets.Unicode("").tag(sync=True)
     system_prompt = traitlets.Unicode("").tag(sync=True)
+    capabilities = traitlets.Dict({}).tag(sync=True)
     initial_prompts = traitlets.List(traitlets.Dict()).tag(sync=True)
+    temperature = traitlets.Float(-1).tag(sync=True)
+    topK = traitlets.Int(-1).tag(sync=True)
+    _refresh_capabilities = traitlets.Bool(False).tag(sync=True)
     _request_id = traitlets.Int(0).tag(sync=True)
 
-    def __init__(self, headless=False, completion_tone=True, speak_msg=False):
+    def __init__(self, headless=False, completion_tone=True, speak_msg=False, temperature=-1, topK=-1):
         super().__init__()
         self.session = None
         self._futures = {}
         self.headless = headless
         self.completion_tone = completion_tone
         self.speak_msg = speak_msg
+        self.top = topK
+        self.temperature = temperature
 
-    def create_session(self, system_prompt=None, initial_prompts=None):
+    def create_session(self, system_prompt=None, initial_prompts=None, temperature=None, topK=None):
         self.system_prompt = system_prompt or ""
         self.initial_prompts = initial_prompts or []
         self.session = True
+        self.temperature = temperature or -1
+        self.topK = topK or -1
         self.output = "[Session created]"
-        #return self.session
+        # return self.session
 
     def prompt(self, message):
         if not self.session:
@@ -76,26 +85,35 @@ class WindowAIWidget(anywidget.AnyWidget):
     def get_latest_output(self):
         return self.output
 
+    def update_capabilities(self):
+        self._refresh_capabilities = not self._refresh_capabilities
 
-def windowai_headless(completion_tone=True, speak_msg=False):
+    def get_capabilities(self):
+        return self.capabilities
+
+
+def windowai_headless(completion_tone=True, speak_msg=False, **kwargs):
     widget_ = WindowAIWidget(
-        headless=True, completion_tone=completion_tone, speak_msg=speak_msg
+        headless=True, completion_tone=completion_tone, speak_msg=speak_msg, **kwargs
     )
     display(widget_)
+    widget_.update_capabilities()
     return widget_
 
 
-def windowai_inline(completion_tone=False, speak_msg=False):
-    widget_ = WindowAIWidget(completion_tone=completion_tone, speak_msg=speak_msg)
+def windowai_inline(**kwargs):
+    widget_ = WindowAIWidget(**kwargs)
     display(widget_)
+    widget_.update_capabilities()
     return widget_
 
 
 # Launch with custom title as: windowai_panel("window.ai Widget")
 # Use second parameter for anchor
 @create_panel
-def windowai_panel(
-    title=None, anchor=None, completion_tone=False, speak_msg=False
-):
-    return WindowAIWidget( completion_tone=completion_tone, speak_msg=speak_msg
+def windowai_panel(title=None, anchor=None, **kwargs):
+    widget_ = WindowAIWidget(
+        **kwargs
     )
+    widget_.update_capabilities()
+    return widget_

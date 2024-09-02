@@ -67,13 +67,15 @@ w = windowai_headless()
 
 ```
 
+Get model capabilities: `w.update_capabilities()`. *Note that this may take a moment to update the py state and no callback is currently available. Run the command in its own cell and wait a moment.*
+
 Create a prompt session with an optional system prompt: `w.create_session(system_prompt=PROMPT)`
 
 Submit a prompt: `w.prompt("Hello, how are you?")`
 
-Also available: `w.create_session(..., initialPrompts=[] )`
+Also available: `w.create_session(..., initialPrompts=[], temperature=FLOAT, topK=INT )`
 
-At the moment, there is no callback available on a response ggenerated from a prompt. However, an audible alert *is* available.
+At the moment, there is no callback available on a response generated from a prompt. However, an audible alert *is* available.
 
 This is enabled by default in `windowai_headless()`. The response can also be spoken. Use boolean (`True`/`False` ) parameters `completion_tone=` and `speak_msg=` in `windowai_panel()`, `windowai_inline()` and `windowai_headless()` to set audible responses.
 
@@ -85,7 +87,6 @@ See `window.ai.assistant` docs for more examples that should translate: [Google 
 
 ## TO DO
 
-- add support for changing `temperature`, `topK`;
 - add `autosession` flag to allow session to be automatically configured and created when a widget is instantiated;
 - add support for other APIs ([`explainers-by-googlers/writing-assistance-apis`](https://github.com/explainers-by-googlers/writing-assistance-apis))
 
