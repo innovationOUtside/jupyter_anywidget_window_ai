@@ -34,7 +34,7 @@ async function render({ model, el }) {
     if (!session) {
       try {
         const options = {};
-        
+
         const systemPrompt = model.get("system_prompt");
         if (systemPrompt) options.systemPrompt = systemPrompt;
 
@@ -51,7 +51,7 @@ async function render({ model, el }) {
           options.topK = topK;
         }
 
-        console.log(`Creating model with optons: ${JSON.stringify(options)}`);
+        console.log(`Creating model with options: ${JSON.stringify(options)}`);
         session = await window.ai.assistant.create(options);
       } catch (error) {
         console.error("Failed to create AI session:", error);
